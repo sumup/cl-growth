@@ -1,5 +1,6 @@
 # Use "git rm -rf --cached ." to clear cache when writing rules for existing files 
 .venv
+.vscode
 databases/r2_analysis_database
 databases/transbank/CCN/*
 databases/transbank/CDN/*
