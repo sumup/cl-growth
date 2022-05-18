@@ -1,0 +1,2 @@
+delete from analyst_acquisition_cl.retail_punto_serial_numbers_prod
+returning *

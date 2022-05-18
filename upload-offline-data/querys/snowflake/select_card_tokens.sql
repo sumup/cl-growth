@@ -1,0 +1,5 @@
+select
+card_token__google_sheets as card_token,
+partner_mid__google_sheets as partner_mx_code
+from"SHARED_FUNNEL_SUMUP__LM3JD3KWKTSKJUJGEZZ"."FUNNEL__LM3JD3KWKTSKJUJGEZZ"."SUPPORT_PARTNERS_INFO"
+where card_token__google_sheets is not null

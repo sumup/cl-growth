@@ -1,0 +1,7 @@
+select
+SERIAL_NUMBER__GOOGLE_SHEETS as serial_number
+,CARD_READER_TYPE__GOOGLE_SHEETS as card_reader_type
+,CHANNEL__GOOGLE_SHEETS as channel
+, case when partner_id__GOOGLE_SHEETS = 0 then null else partner_id__GOOGLE_SHEETS::int end as partner_id 
+from "SHARED_FUNNEL_SUMUP__LM3JD3KWKTSKJUJGEZZ"."FUNNEL__LM3JD3KWKTSKJUJGEZZ"."RETAIL_PUNTO_SERIAL_NUMBERS"
+where SERIAL_NUMBER__GOOGLE_SHEETS is not null

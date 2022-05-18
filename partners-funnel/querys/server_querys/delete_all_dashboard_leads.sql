@@ -1,0 +1,2 @@
+delete from analyst_acquisition_cl.partners_leads_dashboard
+returning *
