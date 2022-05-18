@@ -2,9 +2,10 @@ import datetime
 import numpy as np
 import pandas as pd
 import pytz
-from ..modules.sql import dwh
-from os import path
-from ..modules.snowflake_connector import sn_dwh
+from os import path, chdir
+chdir(path.join('cl-upload-offline-data'))
+from modules.sql import dwh
+from modules.snowflake_connector import sn_dwh
 
 query_name = 'influencers_vouchers'
 raf_influencers = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(

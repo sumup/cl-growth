@@ -2,13 +2,15 @@ import timeit
 import urllib.request, json
 import warnings
 from collections import defaultdict
-from ..modules.sql import dwh
 from shapely.geometry import Point, Polygon
 from tqdm import tqdm
 import geopandas as gpd
 import numpy as np
-from os import path
-from ..modules.snowflake_connector import sn_dwh
+from os import path, chdir
+chdir(path.join('cl-upload-offline-data'))
+from modules.sql import dwh
+from modules.snowflake_connector import sn_dwh
+
 
 
 # Geodata URL in JSON format -> https://www.ine.cl/herramientas/portal-de-mapas/geodatos-abiertos (Censo 2017 Distrito Censal: Población, viviendas por área y densidad)

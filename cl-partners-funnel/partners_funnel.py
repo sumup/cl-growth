@@ -4,11 +4,12 @@ import pandas as pd
 import pytz
 import requests
 import time
+from os import path, chdir
+chdir(path.join('cl-partners-funnel'))
 from modules.sql import dwh
-from os import path
+from modules.snowflake_connector import sn_dwh
 from requests.api import request
 from requests.sessions import RequestsCookieJar
-from modules.snowflake_connector import sn_dwh
 
 
 funnel = pd.DataFrame(columns=['partner_id','email','cohort','status_date','status','lead_source'])
