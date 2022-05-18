@@ -9,19 +9,19 @@ from requests.api import request
 from requests.sessions import RequestsCookieJar
 
 ##################################################################################
-# Stage 0: Update NCRO
+# Stage 0: Update resend_comercios_partners
 ##################################################################################
 
 try:
     started_at = datetime.datetime.now()
-    query_name = 'partners_mean_tpv'
+    query_name = 'partners_card_readers'
     result = dwh().run_query(filename=path.join('querys', 'server_querys', f'update_{query_name}.sql'))
     ended_at = datetime.datetime.now()
     minutes = (ended_at - started_at).seconds/60
     refresh_results = pd.DataFrame(columns=['date_refresh', 'result', 'reason_failed', 'started_at', 'ended_at', 'execution_time_minutes'])
     data = {
         'date_refresh': datetime.datetime.now().date().strftime('%Y-%m-%d')
-        ,'result': 'partners_mean_tpv_successful'
+        ,'result': 'partners_card_readers_successful'
         ,'reason_failed': np.nan
         ,'started_at': started_at
         ,'ended_at': ended_at
@@ -34,7 +34,7 @@ except Exception as e:
     refresh_results = pd.DataFrame(columns=['date_refresh', 'result', 'reason_failed', 'started_at', 'ended_at', 'execution_time_minutes'])
     data = {
         'date_refresh': datetime.datetime.now().date().strftime('%Y-%m-%d')
-        ,'result': 'partners_mean_tpv_successful_failed'
+        ,'result': 'partners_card_readers_successful_failed'
         ,'reason_failed': str(e)
         ,'started_at': np.nan
         ,'ended_at': np.nan

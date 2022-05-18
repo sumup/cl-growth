@@ -1,0 +1,1 @@
+refresh materialized view concurrently analyst_acquisition_cl.partners_card_readers

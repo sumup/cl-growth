@@ -1,0 +1,1 @@
+refresh materialized view analyst_acquisition_cl.resend_comercios_partners

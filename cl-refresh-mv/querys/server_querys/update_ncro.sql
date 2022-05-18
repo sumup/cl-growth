@@ -1,0 +1,1 @@
+refresh materialized view analyst_acquisition_cl.new_card_readers_owners
