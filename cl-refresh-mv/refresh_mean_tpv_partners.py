@@ -3,8 +3,9 @@ import numpy as np
 import pandas as pd
 import requests
 import time
+from os import path, chdir
+chdir(path.join('cl-refresh-mv'))
 from modules.sql import dwh
-from os import path
 from requests.api import request
 from requests.sessions import RequestsCookieJar
 
