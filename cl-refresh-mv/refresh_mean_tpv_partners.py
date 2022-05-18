@@ -4,7 +4,6 @@ import pandas as pd
 import requests
 import time
 import sys
-sys.path.append('../modules')
 from os import path, chdir
 chdir(path.join('cl-refresh-mv'))
 from modules.sql import dwh
