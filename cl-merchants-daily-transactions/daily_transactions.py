@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import pytz
 from os import path, chdir
-#chdir(path.join('cl-merchants-daily-transactions'))
+chdir(path.join('cl-merchants-daily-transactions'))
 from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
 
@@ -33,7 +33,7 @@ if not prod:
             print(f'Running from {start_date} to {end_date}')
             query_name = 'merchants_daily_transactions'
             extracted_data = dwh().dwh_to_pandas(
-                filename=path.join('server_querys', f'select_{query_name}.sql'),
+                filename=path.join('querys','server_querys', f'select_{query_name}.sql'),
                 _start_date = start_date,
                 _end_date = end_date)
 
@@ -50,6 +50,7 @@ if prod:
     start_date = (datetime.datetime.now(tz=santiago_tz) - datetime.timedelta(days=1)).strftime("%Y-%m-%d 00:00:00")
     end_date = datetime.datetime.now(tz=santiago_tz).strftime("%Y-%m-%d 00:00:00")
 
+    query_name = 'merchants_daily_transactions'
     extracted_data = dwh().dwh_to_pandas(
                 filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
                 _start_date = start_date,
