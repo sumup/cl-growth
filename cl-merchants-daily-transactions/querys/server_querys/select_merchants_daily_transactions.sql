@@ -65,7 +65,7 @@ end as total_fee,
 t.card_reader_id,
 cr.code,
 crt."name" as card_reader_type,
-tes.updated_at::date,
+timezone('America/Santiago', timezone('UTC', tes.updated_at))::date as updated_at,
 ts."name" 
 from transactions t
 left join card_readers cr on cr.id = t.card_reader_id

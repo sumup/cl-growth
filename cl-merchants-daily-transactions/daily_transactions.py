@@ -8,8 +8,8 @@ from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
 
 
-start_date = '2016-01-01 00:00:00'  
-end_date = '2022-05-18 00:00:00'
+start_date = '2017-01-01 00:00:00'  
+end_date = '2022-05-19 00:00:00'
 
 #end_date = datetime.datetime.now()
 
