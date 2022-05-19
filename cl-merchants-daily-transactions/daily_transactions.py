@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import pytz
 from os import path, chdir
-chdir(path.join('cl-merchants-daily-transactions'))
+#chdir(path.join('cl-merchants-daily-transactions'))
 from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
 
