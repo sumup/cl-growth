@@ -5,12 +5,12 @@ tx.code as serial_number,
 tx.card_reader_type,
 tx.payment_type,
 tx."name" as event_type, 
-count(tx.tx_result = '11' or NULL) as total_succesfull_tx,
+count(tx.tx_result = '11' or NULL) as total_successful_tx,
 count(tx.tx_result = '20' or NULL) as total_failed_tx,
 sum(case
 	when tx.tx_result = '11' then tx.event_amount
 	else 0
-end) as total_amount_succesfull,
+end) as total_amount_successful,
 sum(case
 	when tx.tx_result = '20' then tx.event_amount
 	else 0
