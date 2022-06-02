@@ -8,7 +8,7 @@ chdir(path.join('cl-payback-acquisition'))
 from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
 
-start_date = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).strftime("%Y-%m-%d 00:00:00")
+start_date = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
 end_date = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).strftime("%Y-%m-%d 00:00:00")
 
 print(f'Running from {start_date} to {end_date}')
@@ -19,8 +19,7 @@ print(f'Running from {start_date} to {end_date}')
 query_name = 'om_campaigns_data'
 online_campaigns = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(
     filename=path.join('querys', 'snowflake', f'select_{query_name}.sql'),
-            _start_date = start_date,
-            _end_date = end_date
+            _start_date = start_date
 )
 
 online_campaigns.columns = online_campaigns.columns.str.lower()
