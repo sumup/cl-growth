@@ -1,5 +1,5 @@
 select
-to_char(ncro.card_reader_owner_date , 'IYYY-IW') as week_date,
+ncro.card_reader_owner_date , as date,
 case
 when ncro.channel in ('partners', 'partners_rcp', 'partner_r') then 'PARTNERS'
 when ncro.channel in ('digital') then 'DIGITAL'
@@ -18,4 +18,5 @@ else upper(ncro.card_reader_type)
 end as cr_type,
 count(distinct dim_merchant_id) as qty_ncro
 from analyst_acquisition_cl.new_card_readers_owners ncro
+where ncro.card_reader_owner_date between '_start_date' and '_end_date'
 group by 1,2,3

@@ -1,7 +1,7 @@
 select
 	--trim(regexp_replace(v.code,'[^[:alpha:]\s]', '', 'g'))  as voucher_name
 	--, sop.shipping_order_id as order_id
-	to_char(so.payment_date, 'IYYY-IW') as week_date
+	so.payment_date as date
 	--, so.reason as cr_shipped_reason
 	, case 
 		when v.code ilike 'CL_PARTNERS%%' then 'PARTNERS'
@@ -38,5 +38,6 @@ and so.status = 'PAID'
 and so.reason in ('customer_requested','partner_requested')
 and sop.quantity > 0
 and p.title <> 'accessory.air_cradle'
+and so.payment_date between '_start_date' and '_end_date'
 group by 1,2,3,5--,4,
 order by week_date desc 

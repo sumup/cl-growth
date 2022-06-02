@@ -1,7 +1,8 @@
-select pncro.*, nbt.cro_bonus 
-from (select pdp.partner_id, count(distinct pdp.merchant_id) as ncro
-from analyst_acquisition_cl.partners_dashboard_prod pdp
-where pdp.comercio = 'Nuevo'
-and pdp.activation_date between timezone('America/Santiago', date_trunc('month', now())::timestamp) and timezone('America/Santiago', now()::timestamp)
-group by 1) as pncro
-left join analyst_acquisition_cl.ncros_bonus_table nbt on nbt.quantity_ncro = pncro.ncro
+select
+pdn.last_day as date,
+'Partners' as acq_channel_level_1,
+'Bonus' as acq_channel_level_2,
+sum(pdn.bonus) as amount_spent
+from analyst_acquisition_cl.partners_dashboard_new pdn
+where pdn.last_day between '_start_date' and '_end_date'
+group by 1,2,3
