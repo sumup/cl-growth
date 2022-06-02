@@ -15,8 +15,7 @@ end_date = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsec
 query_name= 'crs'
 crs = dwh().dwh_to_pandas(
     filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
-    _start_date = start_date,
-    _end_date = end_date
+    _start_date = start_date
     )
 
 crs['cr_type'] = np.where(crs['cr_type'] == 'BUNDLE', 'AIR', crs['cr_type'])
@@ -29,8 +28,7 @@ new_crs['weighted_price'] = new_crs['total_price'] / new_crs['qty']
 query_name= 'ncro'
 ncro = dwh().dwh_to_pandas(
     filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
-    _start_date = start_date,
-    _end_date = end_date
+    _start_date = start_date
     )
 
 

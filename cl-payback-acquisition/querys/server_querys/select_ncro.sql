@@ -18,5 +18,5 @@ else upper(ncro.card_reader_type)
 end as cr_type,
 count(distinct dim_merchant_id) as qty_ncro
 from analyst_acquisition_cl.new_card_readers_owners ncro
-where ncro.card_reader_owner_date between '_start_date' and '_end_date'
+where ncro.card_reader_owner_date = '_start_date'
 group by 1,2,3

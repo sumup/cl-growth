@@ -38,6 +38,6 @@ and so.status = 'PAID'
 and so.reason in ('customer_requested','partner_requested')
 and sop.quantity > 0
 and p.title <> 'accessory.air_cradle'
-and so.payment_date between '_start_date' and '_end_date'
+and so.payment_date = '_start_date'
 group by 1,2,3,5--,4,
 order by date desc 
