@@ -104,8 +104,7 @@ dwh().pandas_to_dwh(
 query_name = 'partners_bonus'
 partners_budget = dwh().dwh_to_pandas(
     filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
-    _start_date = start_date,
-    _end_date = end_date)
+    _start_date = start_date)
 
 dwh().pandas_to_dwh(
         dataframe=partners_budget,
