@@ -96,5 +96,5 @@ select
 	,drbr.raf_bonus_rewards
 from daily_raf_regular_rewards drrr
 left join daily_raf_bonus_rewards drbr on drrr.day = drbr.day
-where drrr.day between '_start_date' and '_end_date'
+where drrr.day = '_start_date'
 order by drrr.day desc

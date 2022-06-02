@@ -40,8 +40,7 @@ dwh().pandas_to_dwh(
 query_name = 'raf_budget'
 raf_budget = dwh().dwh_to_pandas(
     filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
-    _start_date = start_date,
-    _end_date = end_date)
+    _start_date = start_date)
 
 raf_budget_bonus = raf_budget.copy()
 raf_budget['acq_channel_level_1'] = 'RaF'
@@ -66,23 +65,16 @@ columns = {
 inplace = True
 )
 
-if raf_budget['acq_channel_level_2'].notnull():
-    
-    dwh().pandas_to_dwh(
-        dataframe=raf_budget,
-        schema_name='analyst_acquisition_cl',
-        table_name='growth_acquisition_budget',
-        if_exists='append'
-    )
+raf_budget = raf_budget.append(raf_budget_bonus)
 
-if raf_budget['acq_channel_level_2'].notnull():
+raf_budget.dropna(subset = ["acq_channel_level_2"], inplace=True)
     
-    dwh().pandas_to_dwh(
-        dataframe=raf_budget,
-        schema_name='analyst_acquisition_cl',
-        table_name='growth_acquisition_budget',
-        if_exists='append'
-    )
+dwh().pandas_to_dwh(
+    dataframe=raf_budget,
+    schema_name='analyst_acquisition_cl',
+    table_name='growth_acquisition_budget',
+    if_exists='append'
+)
 
 
 
