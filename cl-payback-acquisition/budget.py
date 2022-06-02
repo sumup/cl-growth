@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import pytz
 from os import path, chdir
+
+from sqlalchemy import null
 chdir(path.join('cl-payback-acquisition'))
 from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
@@ -45,11 +47,11 @@ raf_budget = dwh().dwh_to_pandas(
 raf_budget_bonus = raf_budget.copy()
 raf_budget['acq_channel_level_1'] = 'RaF'
 raf_budget = raf_budget.drop(['raf_bonus_rewards'], axis=1)
-raf_budget['acq_channel_level_2'] = np.where(raf_budget['raf_regular_rewards'].isnull(),np.nan, 'Regular')
+raf_budget['acq_channel_level_2'] = np.where(pd.isnull(raf_budget['raf_regular_rewards']),None, 'Regular')
 
 raf_budget_bonus = raf_budget_bonus.drop(['raf_regular_rewards'], axis=1)
 raf_budget_bonus['acq_channel_level_1'] = 'RaF'
-raf_budget_bonus['acq_channel_level_2'] = np.where(raf_budget_bonus['raf_bonus_rewards'].isnull(),np.nan, 'Bonus')
+raf_budget_bonus['acq_channel_level_2'] = np.where(pd.isnull(raf_budget_bonus['raf_bonus_rewards']),None, 'Bonus')
 
 raf_budget.rename(
 columns = {
@@ -65,7 +67,7 @@ columns = {
 inplace = True
 )
 
-raf_budget = raf_budget.append(raf_budget_bonus)
+raf_budget = pd.concat([raf_budget,raf_budget_bonus])
 
 raf_budget.dropna(subset = ["acq_channel_level_2"], inplace=True)
     
@@ -87,8 +89,7 @@ dwh().pandas_to_dwh(
 query_name = 'partners_facebook_campaigns_data'
 partners_campaigns = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(
     filename=path.join('querys', 'snowflake', f'select_{query_name}.sql'),
-            _start_date = start_date,
-            _end_date = end_date
+            _start_date = start_date
 )
 partners_campaigns.columns= partners_campaigns.columns.str.lower()
 
