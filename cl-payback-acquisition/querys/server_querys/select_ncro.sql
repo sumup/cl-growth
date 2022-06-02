@@ -1,5 +1,5 @@
 select
-ncro.card_reader_owner_date , as date,
+ncro.card_reader_owner_date as date,
 case
 when ncro.channel in ('partners', 'partners_rcp', 'partner_r') then 'PARTNERS'
 when ncro.channel in ('digital') then 'DIGITAL'
