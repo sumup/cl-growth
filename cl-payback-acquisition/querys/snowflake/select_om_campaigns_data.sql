@@ -1,5 +1,5 @@
 select
-date::date,
+date::date as date,
 channel_chile as acq_channel_level_1,
 campaign as acq_channel_level_2,
 sum(cost) as amount_spent,

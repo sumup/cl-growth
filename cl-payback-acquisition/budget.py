@@ -25,7 +25,7 @@ online_campaigns = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(
 
 online_campaigns.columns = online_campaigns.columns.str.lower()
 
-online_campaigns.drop(['total_purchases'], axis=1)
+online_campaigns = online_campaigns.drop(['total_purchases'], axis=1)
 
 dwh().pandas_to_dwh(
         dataframe=online_campaigns,
@@ -46,10 +46,10 @@ raf_budget = dwh().dwh_to_pandas(
 
 raf_budget_bonus = raf_budget.copy()
 raf_budget['acq_channel_level_1'] = 'RaF'
-raf_budget.drop(['raf_bonus_rewards'], axis=1)
+raf_budget = raf_budget.drop(['raf_bonus_rewards'], axis=1)
 raf_budget['acq_channel_level_2'] = np.where(raf_budget['raf_regular_rewards'].isnull(),np.nan, 'Regular')
 
-raf_budget_bonus.drop(['raf_regular_rewards'], axis=1)
+raf_budget_bonus = raf_budget_bonus.drop(['raf_regular_rewards'], axis=1)
 raf_budget_bonus['acq_channel_level_1'] = 'RaF'
 raf_budget_bonus['acq_channel_level_2'] = np.where(raf_budget_bonus['raf_bonus_rewards'].isnull(),np.nan, 'Bonus')
 
