@@ -40,4 +40,4 @@ and sop.quantity > 0
 and p.title <> 'accessory.air_cradle'
 and so.payment_date between '_start_date' and '_end_date'
 group by 1,2,3,5--,4,
-order by week_date desc 
+order by date desc 

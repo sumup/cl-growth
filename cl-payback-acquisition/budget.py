@@ -125,6 +125,8 @@ external_budget = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(
             _date = first_month_day,
 )
 
+external_budget.columns= external_budget.columns.str.lower()
+
 
 year = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).year
 month = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).month
@@ -134,6 +136,9 @@ external_budget['amount_spent'] = external_budget['amount_spent']/num_days
 
 external_budget['date'] = start_date
 external_budget['acq_channel_level_2'] = 'Others'
+
+external_budget = external_budget.drop(['month'], axis=1)
+
 
 dwh().pandas_to_dwh(
         dataframe=external_budget,

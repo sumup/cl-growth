@@ -8,9 +8,15 @@ chdir(path.join('cl-payback-acquisition'))
 from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
 
+start_date = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+end_date = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).strftime("%Y-%m-%d 00:00:00")
+
+
 query_name= 'crs'
 crs = dwh().dwh_to_pandas(
-    filename=path.join('querys', 'server_querys', f'select_{query_name}.sql')
+    filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
+    _start_date = start_date,
+    _end_date = end_date
     )
 
 crs['cr_type'] = np.where(crs['cr_type'] == 'BUNDLE', 'AIR', crs['cr_type'])
@@ -22,7 +28,9 @@ new_crs['weighted_price'] = new_crs['total_price'] / new_crs['qty']
 
 query_name= 'ncro'
 ncro = dwh().dwh_to_pandas(
-    filename=path.join('querys', 'server_querys', f'select_{query_name}.sql')
+    filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
+    _start_date = start_date,
+    _end_date = end_date
     )
 
 
