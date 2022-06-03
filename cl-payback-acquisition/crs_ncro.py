@@ -61,7 +61,16 @@ new_crs = new_crs.drop(['total_price','total_purchases_channel','total_purchases
 new_crs.rename(
 columns = {
     'acq_channel_level_1': 'acq_channel_level_2',
-    'channel':'acq_channel_level_1'
+    'channel':'acq_channel_level_1',
+    'qty': 'crs',
+    'qty_ncro': 'ncro'
 },
 inplace = True
 )
+
+dwh().pandas_to_dwh(
+        dataframe=new_crs,
+        schema_name='analyst_acquisition_cl',
+        table_name='growth_sales',
+        if_exists='append'
+    )
