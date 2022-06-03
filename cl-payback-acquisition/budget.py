@@ -16,7 +16,6 @@ santiago_tz = pytz.timezone('America/Santiago')
 start_date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
 end_date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0)).strftime("%Y-%m-%d 00:00:00")
 
-print(f'Running from {start_date} to {end_date}')
 #################################################################################
 ################################ Digital Budget #################################
 #################################################################################
@@ -30,6 +29,7 @@ online_campaigns = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(
 online_campaigns.columns = online_campaigns.columns.str.lower()
 
 online_campaigns = online_campaigns.drop(['total_purchases'], axis=1)
+online_campaigns['acq_channel_level_1'] = 'Digital'
 
 dwh().pandas_to_dwh(
         dataframe=online_campaigns,
@@ -73,7 +73,8 @@ inplace = True
 raf_budget = pd.concat([raf_budget,raf_budget_bonus])
 
 raf_budget.dropna(subset = ["acq_channel_level_2"], inplace=True)
-    
+raf_budget['acq_channel_level_3'] = None
+
 dwh().pandas_to_dwh(
     dataframe=raf_budget,
     schema_name='analyst_acquisition_cl',
@@ -97,6 +98,7 @@ partners_campaigns = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(
 partners_campaigns.columns= partners_campaigns.columns.str.lower()
 
 partners_campaigns['acq_channel_level_1'] = 'Partners'
+partners_campaigns['acq_channel_level_3'] = None
 dwh().pandas_to_dwh(
         dataframe=partners_campaigns,
         schema_name='analyst_acquisition_cl',
@@ -108,7 +110,7 @@ query_name = 'partners_bonus'
 partners_budget = dwh().dwh_to_pandas(
     filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
     _start_date = start_date)
-
+partners_budget['acq_channel_level_3'] = None
 dwh().pandas_to_dwh(
         dataframe=partners_budget,
         schema_name='analyst_acquisition_cl',
@@ -139,7 +141,7 @@ external_budget['amount_spent'] = external_budget['amount_spent']/num_days
 
 external_budget['date'] = start_date
 external_budget['acq_channel_level_2'] = 'Others'
-
+external_budget['acq_channel_level_3'] = None
 external_budget = external_budget.drop(['month'], axis=1)
 
 

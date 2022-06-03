@@ -43,7 +43,7 @@ online_campaigns = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(
 )
 
 online_campaigns.columns = online_campaigns.columns.str.lower()
-ratio = online_campaigns.groupby(['date','acq_channel_level_1']).sum()['total_purchases'].reset_index()
+ratio = online_campaigns.groupby(['date','acq_channel_level_2']).sum()['total_purchases'].reset_index()
 
 ratio = ratio.merge(online_campaigns.groupby(['date']).sum()['total_purchases'].reset_index(),on='date',how='left',suffixes=['_channel','_total'])
 ratio['channel_ratio'] = ratio['total_purchases_channel']/ratio['total_purchases_total']
@@ -60,7 +60,6 @@ new_crs = new_crs.drop(['total_price','total_purchases_channel','total_purchases
 
 new_crs.rename(
 columns = {
-    'acq_channel_level_1': 'acq_channel_level_2',
     'channel':'acq_channel_level_1',
     'qty': 'crs',
     'qty_ncro': 'ncro'
