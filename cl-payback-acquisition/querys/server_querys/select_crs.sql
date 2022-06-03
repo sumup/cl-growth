@@ -11,7 +11,7 @@ select
 		when (p2.name in ('Gifts_influencer','GIFTS_INFLUENCERSOLO')
 			or p2.name in ('CL_Influencers') 
 			or p2.name in ('CL_Influencers_Solo')) then 'RAF-I'
-		when v.code in ('AIR_PHYSICAL_CL', 'BUNDLE_PHYSICAL_CL', 'SOLO_PHYSICAL_CL') then 'PUNTO'
+		when p2.name in ('_PHYSICAL_SALES_CL', 'PHYSICAL_SALES_CL_', 'PHYSICAL_SALES_CL') then 'PUNTO'
 		when v.code in ('COMPRAS_RETAIL_CL', 'CL_RETAIL_COMPRAS_CL','CL_RETAIL_SOLO') then 'RETAIL'
 		when v.code in ('CL_VAPS', 'VAPS_CL', 'MVPVAPSQ4') then 'VAP'
 		when v.code in ('VENTAS_MASIVAS_CL','CL_PRODEMU') then 'MASSIVE SALES'

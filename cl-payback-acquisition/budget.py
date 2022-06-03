@@ -10,8 +10,11 @@ chdir(path.join('cl-payback-acquisition'))
 from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
 
-start_date = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-end_date = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).strftime("%Y-%m-%d 00:00:00")
+santiago_tz = pytz.timezone('America/Santiago')
+
+
+start_date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+end_date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0)).strftime("%Y-%m-%d 00:00:00")
 
 print(f'Running from {start_date} to {end_date}')
 #################################################################################
@@ -118,7 +121,7 @@ dwh().pandas_to_dwh(
 ################################# Google Sheets Budget ##################################
 #################################################################################
 
-first_month_day = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).replace(day=1).strftime("%Y-%m-%d")
+first_month_day = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).replace(day=1).strftime("%Y-%m-%d")
 query_name = 'external_budget'
 external_budget = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(
     filename=path.join('querys', 'snowflake', f'select_{query_name}.sql'),
@@ -128,8 +131,8 @@ external_budget = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(
 external_budget.columns= external_budget.columns.str.lower()
 
 
-year = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).year
-month = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).month
+year = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).year
+month = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).month
 num_days = monthrange(year, month)[1]
 
 external_budget['amount_spent'] = external_budget['amount_spent']/num_days
