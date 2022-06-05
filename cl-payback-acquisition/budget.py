@@ -14,7 +14,6 @@ santiago_tz = pytz.timezone('America/Santiago')
 
 
 start_date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-end_date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0)).strftime("%Y-%m-%d 00:00:00")
 
 #################################################################################
 ################################ Digital Budget #################################
