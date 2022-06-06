@@ -1,7 +1,7 @@
 select
 gs."date" ,
 gs.acq_channel_level_1,
-'Partners' as acq_channel_level_2,
+gs.acq_channel_level_2,
 gs.cr_type,
 gs.crs,
 gs.ncro,
