@@ -8,4 +8,4 @@ gs.ncro,
 gs.weighted_price 
 from analyst_acquisition_cl.growth_sales gs
 where gs."date"  = '_date'
-and gs.gs.acq_channel_level_1 = 'PARTNERS'
+and gs.acq_channel_level_1 = 'PARTNERS'
