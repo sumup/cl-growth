@@ -32,7 +32,7 @@ sales = dwh().dwh_to_pandas(
     filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
     _date = date
     )
-sales = sales.drop(sales[(sales.acq_channel_level_1 != 'PUNTO') & (sales.acq_channel_level_1 != 'RAF') & (sales.acq_channel_level_1 != 'DIGITAL')].index)
+sales = sales.drop(sales[(sales.acq_channel_level_1 == 'PARTNERS')].index)
 sales.acq_channel_level_1 = sales.acq_channel_level_1.str.title()
 
 query_name = 'sales_partners'
@@ -47,13 +47,39 @@ sales = pd.concat([sales,sales_partners])
 
 sales['acq_channel_level_1'] = np.where(sales['acq_channel_level_1'] == 'Raf','RaF',sales.acq_channel_level_1)
 sales['acq_channel_level_2'] = np.where(sales['acq_channel_level_1'] != 'Digital',sales['acq_channel_level_1'],sales['acq_channel_level_2'])
-ratio = sales.groupby(['date','acq_channel_level_1','acq_channel_level_2']).sum()['ncro'].reset_index()
 
-ratio = ratio.merge(sales.groupby(['date','acq_channel_level_1','acq_channel_level_2','cr_type']).sum()['ncro'].reset_index(),on=['date','acq_channel_level_1','acq_channel_level_2'],how='left',suffixes=['_total','_cr_type'])
-ratio['card_reader_ratio'] = ratio['ncro_cr_type']/ratio['ncro_total']
+sales.rename(
+        columns = {
+            'crs': 'crs_payback',
+            'ncro': 'ncro_payback',
+            'weighted_price': 'weighted_price_payback'
+        },
+        inplace = True
+    )
+
+query_name = 'sales'
+real_sales = dwh().dwh_to_pandas(
+    filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
+    _date = date
+    )
+
+real_sales.acq_channel_level_1 = real_sales.acq_channel_level_1.str.title()
+
+
+real_sales['acq_channel_level_1'] = np.where(real_sales['acq_channel_level_1'] == 'Raf','RaF',real_sales.acq_channel_level_1)
+real_sales['acq_channel_level_2'] = np.where(real_sales['acq_channel_level_1'] != 'Digital',real_sales['acq_channel_level_1'],real_sales['acq_channel_level_2'])
+
+sales.date = date
+real_sales.date = date
+sales = sales.merge(real_sales,how='outer',on=['date','acq_channel_level_1','acq_channel_level_2','cr_type'])
+
+ratio = sales.groupby(['date','acq_channel_level_1','acq_channel_level_2']).sum()['ncro_payback'].reset_index()
+
+ratio = ratio.merge(sales.groupby(['date','acq_channel_level_1','acq_channel_level_2','cr_type']).sum()['ncro_payback'].reset_index(),on=['date','acq_channel_level_1','acq_channel_level_2'],how='left',suffixes=['_total','_cr_type'])
+ratio['card_reader_ratio'] = ratio['ncro_payback_cr_type']/ratio['ncro_payback_total']
 
 sales = sales.merge(ratio,how='left', on=['date','acq_channel_level_1','acq_channel_level_2','cr_type'])
-sales = sales.drop(['ncro_total','ncro_cr_type'],axis=1)
+sales = sales.drop(['ncro_payback_total','ncro_payback_cr_type'],axis=1)
 
 sales.date = date
 budget.date = date
@@ -75,11 +101,18 @@ punto_solo = [date,'Punto','SOLO']
 raf_solo = [date,'RaF','SOLO']
 partners_solo = [date,'Partners','SOLO']
 digital_solo = [date, 'Digital','SOLO']
+vaps_solo = [date, 'Vap','SOLO']
+retail_solo = [date, 'Retail','SOLO']
+others_solo = [date, 'Other','SOLO']
+
 
 punto_air = [date,'Punto','AIR']
 raf_air = [date,'RaF','AIR']
 partners_air =  [date,'Partners','AIR']
 digital_air = [date, 'Digital','AIR']
+vaps_air = [date, 'Vap','AIR']
+retail_air = [date, 'Retail','AIR']
+others_air = [date, 'Other','AIR']
 
 for index, row in unit_economics.iterrows():
     if row.acq_channel_level_1 == 'Punto':
@@ -118,8 +151,35 @@ for index, row in unit_economics.iterrows():
             partners_air.append(row.value)
         elif row.metric =='CRS Net Landed Cost SOLO':
             partners_solo.append(row.value)
+    elif row.acq_channel_level_1 == 'Retail':
+        if row.metric == 'Avg Monthly Net Rev / nCRO Air':
+            retail_air.append(row.value)
+        elif row.metric == 'Avg Monthly Net Rev / nCRO SOLO':
+            retail_solo.append(row.value)
+        elif row.metric =='CRS Net Landed Cost Air':
+            retail_air.append(row.value)
+        elif row.metric =='CRS Net Landed Cost SOLO':
+            retail_solo.append(row.value)
+    elif row.acq_channel_level_1 == 'Vaps':
+        if row.metric == 'Avg Monthly Net Rev / nCRO Air':
+            vaps_air.append(row.value)
+        elif row.metric == 'Avg Monthly Net Rev / nCRO SOLO':
+            vaps_solo.append(row.value)
+        elif row.metric =='CRS Net Landed Cost Air':
+            vaps_air.append(row.value)
+        elif row.metric =='CRS Net Landed Cost SOLO':
+            vaps_solo.append(row.value)
+    elif row.acq_channel_level_1 == 'Others':
+        if row.metric == 'Avg Monthly Net Rev / nCRO Air':
+            others_air.append(row.value)
+        elif row.metric == 'Avg Monthly Net Rev / nCRO SOLO':
+            others_solo.append(row.value)
+        elif row.metric =='CRS Net Landed Cost Air':
+            others_air.append(row.value)
+        elif row.metric =='CRS Net Landed Cost SOLO':
+            others_solo.append(row.value)
 
-rue = [punto_solo,punto_air,raf_solo,raf_air,partners_solo,partners_air,digital_solo,digital_air]
+rue = [punto_solo,punto_air,raf_solo,raf_air,partners_solo,partners_air,digital_solo,digital_air,retail_solo,retail_air,vaps_solo,vaps_air,others_solo,others_air]
 real_unit_economics = pd.DataFrame(rue,columns=['date','acq_channel_level_1','cr_type','avg_monthly_net_rev_ncro','crs_net_landed_cost'])
 
 sales = sales.merge(real_unit_economics, how='left', on= ['date','acq_channel_level_1','cr_type'])

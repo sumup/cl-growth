@@ -4,11 +4,11 @@ case
 when ncro.channel in ('partners', 'partners_rcp', 'partner_r') then 'PARTNERS'
 when ncro.channel in ('digital') then 'DIGITAL'
 when ncro.channel in ('raf') then 'RAF'
-when ncro.channel in ('raf_influencers') then 'RAF-I'
+when ncro.channel in ('raf_influencers') then 'RAF'
 when ncro.channel in ('Punto Sumup') then 'PUNTO'
 when ncro.channel in ('Retail','Distribuidor') then 'RETAIL'
 when ncro.channel in ('Vaps') then 'VAP'
-when ncro.channel in ('Ventas Masivas') then 'MASSIVE SALES'
+when ncro.channel in ('Ventas Masivas') then 'OTHER'
 else 'OTHER'
 end as channel,
 case
