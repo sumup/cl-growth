@@ -191,6 +191,13 @@ real_unit_economics = pd.DataFrame(rue,columns=['date','acq_channel_level_1','cr
 
 sales = sales.merge(real_unit_economics, how='left', on= ['date','acq_channel_level_1','cr_type'])
 
+sales['crs_payback'] = sales['crs_payback'].fillna(0)
+sales['ncro_payback'] = sales['ncro_payback'].fillna(0)
+sales['weighted_price_payback'] = sales['weighted_price_payback'].fillna(0)
+sales['crs'] = sales['crs'].fillna(0)
+sales['ncro'] = sales['ncro'].fillna(0)
+sales['weighted_price'] = sales['weighted_price'].fillna(0)
+sales['proportional_budget'] = sales['proportional_budget'].fillna(0)
 
 dwh().pandas_to_dwh(
         dataframe=sales,

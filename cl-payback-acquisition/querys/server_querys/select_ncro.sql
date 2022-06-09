@@ -1,7 +1,7 @@
 select
 ncro.card_reader_owner_date as date,
 case
-when ncro.channel in ('partners', 'partners_rcp', 'partner_r') then 'PARTNERS'
+when ncro.channel in ('partners', 'partners_c', 'partners_rcp')then 'PARTNERS'
 when ncro.channel in ('digital') then 'DIGITAL'
 when ncro.channel in ('raf') then 'RAF'
 when ncro.channel in ('raf_influencers') then 'RAF'
@@ -19,4 +19,5 @@ end as cr_type,
 count(distinct dim_merchant_id) as qty_ncro
 from analyst_acquisition_cl.new_card_readers_owners ncro
 where ncro.card_reader_owner_date = '_start_date'
+and ncro.channel not in ('First affiliate/influencer order', 'First partner orders', 'Welcome kits')
 group by 1,2,3

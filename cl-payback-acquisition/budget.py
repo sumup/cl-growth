@@ -117,7 +117,7 @@ def main(start_date):
     ################################# Google Sheets Budget ##################################
     #################################################################################
 
-    first_month_day = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).replace(day=1).strftime("%Y-%m-%d")
+    first_month_day = datetime.datetime.strptime(start_date,"%Y-%m-%d").replace(day=1).strftime("%Y-%m-%d")
     query_name = 'external_budget'
     external_budget = sn_dwh(role='ACQUISITION_ANALYST_CL').cursor_to_pandas(
         filename=path.join('querys', 'snowflake', f'select_{query_name}.sql'),
@@ -127,8 +127,8 @@ def main(start_date):
     external_budget.columns= external_budget.columns.str.lower()
 
 
-    year = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).year
-    month = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).month
+    year = (datetime.datetime.strptime(start_date,"%Y-%m-%d")).year
+    month = (datetime.datetime.strptime(start_date,"%Y-%m-%d")).month
     num_days = monthrange(year, month)[1]
 
     external_budget['amount_spent'] = external_budget['amount_spent']/num_days
