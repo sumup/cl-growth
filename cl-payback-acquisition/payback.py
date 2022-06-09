@@ -10,6 +10,8 @@ from sqlalchemy import null
 chdir(path.join('cl-payback-acquisition'))
 from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
+import budget
+import crs_ncro
 
 santiago_tz = pytz.timezone('America/Santiago')
 
@@ -18,14 +20,19 @@ date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0
 month = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).replace(day=1).strftime("%Y-%m-%d")
 partners_date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=31)).strftime("%Y-%m-%d")
 
+
+budget.main(date)
+crs_ncro.main(date)
+
+
 query_name = 'budget'
-budget = dwh().dwh_to_pandas(
+budget_table = dwh().dwh_to_pandas(
     filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
     _date = date
     )
 
-budget['acq_channel_level_2'] = np.where(budget['acq_channel_level_1'] != 'Digital',budget['acq_channel_level_1'],budget['acq_channel_level_2'])
-budget = budget.groupby(['date','acq_channel_level_1','acq_channel_level_2']).sum()['total_amount_spent'].reset_index()
+budget_table['acq_channel_level_2'] = np.where(budget_table['acq_channel_level_1'] != 'Digital',budget_table['acq_channel_level_1'],budget_table['acq_channel_level_2'])
+budget_table = budget_table.groupby(['date','acq_channel_level_1','acq_channel_level_2']).sum()['total_amount_spent'].reset_index()
 
 query_name = 'sales'
 sales = dwh().dwh_to_pandas(
@@ -82,9 +89,9 @@ sales = sales.merge(ratio,how='left', on=['date','acq_channel_level_1','acq_chan
 sales = sales.drop(['ncro_payback_total','ncro_payback_cr_type'],axis=1)
 
 sales.date = date
-budget.date = date
+budget_table.date = date
 
-sales = sales.merge(budget,how='outer',on = ['date','acq_channel_level_1','acq_channel_level_2'])
+sales = sales.merge(budget_table,how='outer',on = ['date','acq_channel_level_1','acq_channel_level_2'])
 
 sales['proportional_budget'] = sales.card_reader_ratio * sales.total_amount_spent
 sales = sales.drop(['card_reader_ratio','total_amount_spent'],axis=1)
