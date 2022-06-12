@@ -29,8 +29,8 @@ upload = dwh().dwh_to_pandas(
     filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
     )
 
-saved_date = saved[0][0]
-uploaded_date = upload[0][0]
+saved_date = saved.values[0][0]
+uploaded_date = upload.values[0][0]
 
 if saved_date < uploaded_date:
     dwh().pandas_to_dwh(
@@ -42,27 +42,26 @@ if saved_date < uploaded_date:
     query_name = 'forecast_data'
     delete_forecast = dwh().dwh_to_pandas(
     filename=path.join('querys', 'server_querys', f'delete_{query_name}.sql'),
-    _date = saved_date
+    _date = saved_date.strftime("%Y-%m-%d")
     )
     query_name = 'crs_data'
     delete_crs = dwh().dwh_to_pandas(
     filename=path.join('querys', 'server_querys', f'delete_{query_name}.sql'),
-    _date = saved_date
+    _date = saved_date.strftime("%Y-%m-%d")
     )
-    start_date_dt = datetime.datetime.fromisoformat(saved_date)
+    start_date_dt = datetime.datetime.combine(saved_date, datetime.datetime.min.time()) 
     end_date_dt = datetime.datetime.fromisoformat(date)
-    delta = end_date_dt - start_date_dt  # as timedelta
-
+    delta = end_date_dt - start_date_dt
     days = []
     for i in range(0, (delta.days  + 1)):
         days.append((start_date_dt + datetime.timedelta(days=i)).strftime("%Y-%m-%d"))
-
+else:
+    days = [date]
     
 for day in days:
     datetime_day = datetime.datetime.strptime(day,"%Y-%m-%d")
     month = datetime_day.replace(day=1).strftime("%Y-%m-%d")
     partners_date = (datetime_day - datetime.timedelta(days=31)).strftime("%Y-%m-%d")
-
 
 
     crs_ncro.main(day)
