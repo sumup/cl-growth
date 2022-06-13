@@ -1,16 +1,12 @@
 import datetime
-from calendar import monthrange
-from email.headerregistry import DateHeader
-from locale import DAY_3
 import numpy as np
 import pandas as pd
 import pytz
 from os import path, chdir
-
 from sqlalchemy import null
+chdir(path.join('cl-payback-acquisition'))
 import budget
 import crs_ncro
-chdir(path.join('cl-payback-acquisition'))
 from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
 
