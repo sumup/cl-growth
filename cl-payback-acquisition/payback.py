@@ -8,11 +8,12 @@ import pytz
 from os import path, chdir
 
 from sqlalchemy import null
+import budget
+import crs_ncro
 chdir(path.join('cl-payback-acquisition'))
 from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
-import budget
-import crs_ncro
+
 
 santiago_tz = pytz.timezone('America/Santiago')
 
