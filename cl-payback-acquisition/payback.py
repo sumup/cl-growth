@@ -31,7 +31,7 @@ uploaded_date = upload.values[0][0]
 
 if saved_date < uploaded_date:
     dwh().pandas_to_dwh(
-        dataframe=uploaded_date,
+        dataframe=upload,
         schema_name='analyst_acquisition_cl',
         table_name='logistic_last_update',
         if_exists='append'
