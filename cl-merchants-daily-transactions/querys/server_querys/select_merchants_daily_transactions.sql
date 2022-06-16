@@ -78,8 +78,8 @@ left join transaction_statuses ts on ts.id = tes.transaction_event_status_id
 left join public.affiliates a on t.affiliate_key_id = a.affiliate_key_id
 where t.merchant_id = m.id
 and tes.transaction_event_status_id in (11,15,17,102)
-and tes.updated_at >= timezone('UTC', timezone('America/Santiago', '2022-03-23'::timestamp))
-and tes.updated_at < timezone('UTC', timezone('America/Santiago', '2022-03-24'::timestamp))
+and tes.updated_at >= timezone('UTC', timezone('America/Santiago', '_start_date'::timestamp))
+and tes.updated_at < timezone('UTC', timezone('America/Santiago', '_end_date'::timestamp))
 and t.tx_result in ('11', '20')
 ) tx
 where m.country_id = 50
