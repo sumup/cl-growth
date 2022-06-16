@@ -4,6 +4,7 @@ tx.merchant_id,
 tx.code as serial_number,
 tx.card_reader_type,
 tx.payment_type,
+tx.affiliate,
 tx."name" as event_type, 
 count(tx.tx_result = '11' or NULL) as total_successful_tx,
 count(tx.tx_result = '20' or NULL) as total_failed_tx,
@@ -66,18 +67,20 @@ t.card_reader_id,
 cr.code,
 crt."name" as card_reader_type,
 timezone('America/Santiago', timezone('UTC', tes.updated_at))::date as updated_at,
-ts."name" 
+ts."name",
+a.name as affiliate
 from transactions t
 left join card_readers cr on cr.id = t.card_reader_id
 left join card_reader_types crt on crt.id = cr.card_reader_type_id
 left join transaction_events te on te.transaction_id = t.id
 left join transaction_event_states tes on tes.transaction_event_id  = te.id 
-left join transaction_statuses ts on ts.id = tes.transaction_event_status_id 
+left join transaction_statuses ts on ts.id = tes.transaction_event_status_id
+left join public.affiliates a on t.affiliate_key_id = a.affiliate_key_id
 where t.merchant_id = m.id
 and tes.transaction_event_status_id in (11,15,17,102)
-and tes.updated_at >= timezone('UTC', timezone('America/Santiago', '_start_date'::timestamp))
-and tes.updated_at < timezone('UTC', timezone('America/Santiago', '_end_date'::timestamp))
+and tes.updated_at >= timezone('UTC', timezone('America/Santiago', '2022-03-23'::timestamp))
+and tes.updated_at < timezone('UTC', timezone('America/Santiago', '2022-03-24'::timestamp))
 and t.tx_result in ('11', '20')
 ) tx
 where m.country_id = 50
-group by 1,2,3,4,5,6
+group by 1,2,3,4,5,6,7
