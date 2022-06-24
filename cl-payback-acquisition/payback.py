@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import pytz
 from os import path, chdir
-from sqlalchemy import null
 chdir(path.join('cl-payback-acquisition'))
 import budget
 import crs_ncro
