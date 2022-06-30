@@ -12,8 +12,26 @@ from modules.snowflake_connector import sn_dwh
 
 santiago_tz = pytz.timezone('America/Santiago')
 
-date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-budget.main(date)
+start_date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=31)).strftime("%Y-%m-%d 00:00:00")
+end_date = (datetime.datetime.now(tz=santiago_tz).replace(hour=0, minute=0, second=0, microsecond=0)).strftime("%Y-%m-%d 00:00:00")
+
+start_date_dt = datetime.datetime.fromisoformat(start_date)
+end_date_dt = datetime.datetime.fromisoformat(end_date)
+delta = end_date_dt - start_date_dt   # as timedelta
+
+days = []
+for i in range(0, delta.days):
+    days.append((start_date_dt + datetime.timedelta(days=i)).strftime("%Y-%m-%d"))
+
+start_date_str = days[0]
+
+query_name = 'budget_data'
+delete_budget = dwh().dwh_to_pandas(
+filename=path.join('querys', 'server_querys', f'delete_{query_name}.sql'),
+_date = start_date_str
+)
+for day in days:
+    budget.main(days)
 
 query_name = 'last_saved_shipping_date'
 saved = dwh().dwh_to_pandas(
@@ -46,15 +64,20 @@ if saved_date < uploaded_date:
     _date = saved_date.strftime("%Y-%m-%d")
     )
     start_date_dt = datetime.datetime.combine(saved_date, datetime.datetime.min.time()) 
-    end_date_dt = datetime.datetime.fromisoformat(date)
+    end_date_dt = datetime.datetime.fromisoformat(days[-1])
     delta = end_date_dt - start_date_dt
-    days = []
+    days_log = []
     for i in range(0, (delta.days  + 1)):
-        days.append((start_date_dt + datetime.timedelta(days=i)).strftime("%Y-%m-%d"))
+        days_log.append((start_date_dt + datetime.timedelta(days=i)).strftime("%Y-%m-%d"))
 else:
-    days = [date]
-    
-for day in days:
+    days_log = [days[-1]]
+
+if len(days) > len(days_log):
+    days_final = days
+else:
+    days = days_log
+
+for day in days_final:
     datetime_day = datetime.datetime.strptime(day,"%Y-%m-%d")
     month = datetime_day.replace(day=1).strftime("%Y-%m-%d")
     partners_date = (datetime_day - datetime.timedelta(days=31)).strftime("%Y-%m-%d")
