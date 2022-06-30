@@ -31,7 +31,7 @@ filename=path.join('querys', 'server_querys', f'delete_{query_name}.sql'),
 _date = start_date_str
 )
 for day in days:
-    budget.main(days)
+    budget.main(day)
 
 query_name = 'last_saved_shipping_date'
 saved = dwh().dwh_to_pandas(
@@ -74,8 +74,18 @@ else:
 
 if len(days) > len(days_log):
     days_final = days
+    query_name = 'forecast_data'
+    delete_forecast = dwh().dwh_to_pandas(
+    filename=path.join('querys', 'server_querys', f'delete_{query_name}.sql'),
+    _date = start_date_str
+    )
+    query_name = 'crs_data'
+    delete_crs = dwh().dwh_to_pandas(
+    filename=path.join('querys', 'server_querys', f'delete_{query_name}.sql'),
+    _date = start_date_str
+    )
 else:
-    days = days_log
+    days_final = days_log
 
 for day in days_final:
     datetime_day = datetime.datetime.strptime(day,"%Y-%m-%d")

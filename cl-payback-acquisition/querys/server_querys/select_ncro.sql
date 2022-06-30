@@ -9,6 +9,7 @@ when ncro.channel in ('Punto Sumup') then 'PUNTO'
 when ncro.channel in ('Retail','Distribuidor') then 'RETAIL'
 when ncro.channel in ('Vaps') then 'VAP'
 when ncro.channel in ('Ventas Masivas') then 'OTHER'
+when ncro.channel in ('SMX') then 'SMX'
 else 'OTHER'
 end as channel,
 case
