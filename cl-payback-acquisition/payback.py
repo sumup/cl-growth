@@ -182,6 +182,7 @@ for day in days_final:
     vaps_solo = [day, 'Vap','SOLO']
     retail_solo = [day, 'Retail','SOLO']
     others_solo = [day, 'Other','SOLO']
+    smx_solo = [day, 'Small Mx','SOLO']
 
 
     punto_air = [day,'Punto','AIR']
@@ -191,6 +192,7 @@ for day in days_final:
     vaps_air = [day, 'Vap','AIR']
     retail_air = [day, 'Retail','AIR']
     others_air = [day, 'Other','AIR']
+    smx_air = [day, 'Small Mx','AIR']
 
     for index, row in unit_economics.iterrows():
         if row.acq_channel_level_1 == 'Punto':
@@ -256,8 +258,17 @@ for day in days_final:
                 others_air.append(row.value)
             elif row.metric =='CRS Net Landed Cost SOLO':
                 others_solo.append(row.value)
+        elif row.acq_channel_level_1 == 'Small Mx':
+            if row.metric == 'Avg Monthly Net Rev / nCRO Air':
+                smx_air.append(row.value)
+            elif row.metric == 'Avg Monthly Net Rev / nCRO SOLO':
+                smx_solo.append(row.value)
+            elif row.metric =='CRS Net Landed Cost Air':
+                smx_air.append(row.value)
+            elif row.metric =='CRS Net Landed Cost SOLO':
+                smx_solo.append(row.value)
 
-    rue = [punto_solo,punto_air,raf_solo,raf_air,partners_solo,partners_air,digital_solo,digital_air,retail_solo,retail_air,vaps_solo,vaps_air,others_solo,others_air]
+    rue = [punto_solo,punto_air,raf_solo,raf_air,partners_solo,partners_air,digital_solo,digital_air,retail_solo,retail_air,vaps_solo,vaps_air,others_solo,others_air,smx_solo,smx_air]
     real_unit_economics = pd.DataFrame(rue,columns=['date','acq_channel_level_1','cr_type','avg_monthly_net_rev_ncro','crs_net_landed_cost'])
 
     sales = sales.merge(real_unit_economics, how='left', on= ['date','acq_channel_level_1','cr_type'])
