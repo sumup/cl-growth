@@ -27,7 +27,7 @@ select
 		else 'AIR' 
 		end as cr_type
 	, sum(sop.quantity) as qty
-	, sop.original_price 
+	, so.price / so.amount_ordered as original_price
 from public.shipping_orders so
 left join "external".shipping_orders_united sou on sou.public_shipping_order_id = so.id and sou.order_status = 'PAID'
 left join public.shipping_orders_products sop on sop.shipping_order_id = so.id 
@@ -40,6 +40,7 @@ and so.status = 'PAID'
 and so.reason in ('customer_requested','partner_requested')
 and sop.quantity > 0
 and p.title <> 'accessory.air_cradle'
+and p.title <> 'accessory.solo_printer'
 and so.payment_date = '_start_date'
 group by 1,2,3,5--,4,
 order by date desc 
