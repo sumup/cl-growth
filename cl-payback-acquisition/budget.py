@@ -24,7 +24,7 @@ def main(start_date):
 
     online_campaigns = online_campaigns.drop(['total_purchases'], axis=1)
     online_campaigns['acq_channel_level_1'] = 'Digital'
-    online_campaigns['acq_channel_level_1'] = np.where(online_campaigns['acq_channel_level_3']== 'Small MX','Small Mx',online_campaigns['acq_channel_level_1'])
+    online_campaigns['acq_channel_level_1'] = np.where('Small MX' in online_campaigns['acq_channel_level_3'],'Small Mx',online_campaigns['acq_channel_level_1'])
 
     dwh().pandas_to_dwh(
             dataframe=online_campaigns,
