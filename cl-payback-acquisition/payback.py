@@ -292,8 +292,15 @@ for day in days_final:
     fix = dwh().dwh_to_pandas(
         filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
         _date = day
+        ) 
+    for index, row in fix.iterrows():
+        query_name = 'wrong_budget'
+        delete_budget = dwh().dwh_to_pandas(
+        filename=path.join('querys', 'server_querys', f'delete_{query_name}.sql'),
+        _date = row.date,
+        _channel = row.acq_channel_level_1
+        )
 
-        )  
     dwh().pandas_to_dwh(
             dataframe=fix,
             schema_name='analyst_acquisition_cl',

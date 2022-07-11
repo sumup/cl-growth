@@ -1,6 +1,6 @@
 select gfd."date",
 gfd.acq_channel_level_1,
-gfd.acq_channel_level_2,
+gab.acq_channel_level_2,
 gfd.cr_type,
 gfd.crs_payback,
 gfd.ncro_payback,
