@@ -287,3 +287,16 @@ for day in days_final:
             table_name='growth_forecast_data',
             if_exists='append'
         )
+        
+    query_name = 'wrong_budget'
+    fix = dwh().dwh_to_pandas(
+        filename=path.join('querys', 'server_querys', f'select_{query_name}.sql'),
+        _date = day
+
+        )  
+    dwh().pandas_to_dwh(
+            dataframe=fix,
+            schema_name='analyst_acquisition_cl',
+            table_name='growth_forecast_data',
+            if_exists='append'
+        )
