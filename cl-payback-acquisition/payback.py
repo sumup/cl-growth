@@ -297,8 +297,8 @@ for day in days_final:
         query_name = 'wrong_budget'
         delete_budget = dwh().dwh_to_pandas(
         filename=path.join('querys', 'server_querys', f'delete_{query_name}.sql'),
-        _date = row.date,
-        _channel = row.acq_channel_level_1
+        _date = day,
+        _acq_channel_level_1 = row.acq_channel_level_1
         )
 
     dwh().pandas_to_dwh(
