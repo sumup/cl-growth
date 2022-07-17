@@ -4,8 +4,8 @@ import pandas as pd
 import pytz
 from os import path, chdir
 chdir(path.join('cl-payback-acquisition'))
-import budget
-import crs_ncro
+import modules.budget
+import modulues.crs_ncro
 from modules.sql import dwh
 from modules.snowflake_connector import sn_dwh
 
