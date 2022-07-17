@@ -31,7 +31,7 @@ filename=path.join('querys', 'server_querys', f'delete_{query_name}.sql'),
 _date = start_date_str
 )
 for day in days:
-    budget.main(day)
+    modules.budget.main(day)
 
 query_name = 'last_saved_shipping_date'
 saved = dwh().dwh_to_pandas(
@@ -93,7 +93,7 @@ for day in days_final:
     partners_date = (datetime_day - datetime.timedelta(days=31)).strftime("%Y-%m-%d")
 
 
-    crs_ncro.main(day)
+    modules.crs_ncro.main(day)
 
 
     query_name = 'budget'
